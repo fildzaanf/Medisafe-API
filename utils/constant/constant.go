@@ -21,9 +21,10 @@ const (
 	ERROR_DATA_EMPTY       = "data is empty"
 	ERROR_DATA_EXIST       = "data already exists"
 	ERROR_DATA_TYPE        = "data type unsupported"
-	ERROR_FILE_EMPTY       = "file is empty"
 	ERROR_DATA_INVALID     = "invalid data. allowed data: "
+	ERROR_FILE_EMPTY       = "file is empty"
 	ERROR_DATE_FORMAT      = "invalid date format. expected format: '2001-12-30'"
 	ERROR_MIN_LENGTH       = "minimum length is %d characters"
 	ERROR_MAX_LENGTH       = "maximum length is %d characters"
+	ERROR_TOKEN_INVALID	   = "invalid token"
 )
