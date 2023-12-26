@@ -3,6 +3,7 @@ package middlewares
 import (
 	"errors"
 	"os"
+	"talkspace/utils/constant"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -39,5 +40,5 @@ func ExtractToken(e echo.Context) (string, string, error) {
 		Role := claims["role"].(string)
 		return Id, Role, nil
 	}
-	return "", "", errors.New("invalid token")
+	return "", "", errors.New(constant.ERROR_TOKEN_INVALID)
 }
