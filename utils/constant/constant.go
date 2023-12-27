@@ -26,5 +26,6 @@ const (
 	ERROR_DATE_FORMAT      = "invalid date format. expected format: '2001-12-30'"
 	ERROR_MIN_LENGTH       = "minimum length is %d characters"
 	ERROR_MAX_LENGTH       = "maximum length is %d characters"
-	ERROR_TOKEN_INVALID	   = "invalid token"
+	ERROR_TOKEN_INVALID    = "invalid token"
+	ERROR_TEMPLATE_FILE    = "invalid template file"
 )
