@@ -54,6 +54,7 @@ type SMTPConfig struct {
 	SMTP_USER string
 	SMTP_PASS string
 	SMTP_PORT string
+	SMTP_HOST string
 }
 
 func LoadConfig() (*AppConfig, error) {
@@ -97,6 +98,7 @@ func LoadConfig() (*AppConfig, error) {
 			SMTP_USER: os.Getenv("SMTP_USER"),
 			SMTP_PASS: os.Getenv("SMTP_PASS"),
 			SMTP_PORT: os.Getenv("SMTP_PORT"),
+			SMTP_HOST: os.Getenv("SMTP_HOST"),
 		},
 		OPENAI: OpenAIConfig{
 			OPENAI_KEY: os.Getenv("OPENAI_KEY"),
