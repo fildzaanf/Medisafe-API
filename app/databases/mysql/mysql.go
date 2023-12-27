@@ -10,6 +10,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func ConnectMySQL() *gorm.DB {
 	config, err := configs.LoadConfig()
 	if err != nil {
