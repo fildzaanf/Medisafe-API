@@ -46,7 +46,7 @@ func EmailOTP(to []string, template string, data interface{}) (bool, error) {
 
 func SendEmailOTP(emailAddress string, otp string) {
 	go func() {
-		filePath := "utils/helper/email/template/otp.html"
+		filePath := "utils/helper/email/template/one-time-password.html"
 		emailTemplate, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Printf("failed to prepare email template: %v", err)

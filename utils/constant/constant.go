@@ -7,7 +7,9 @@ const (
 	SUCCESS_CREATED          = "data created successfully"
 	SUCCESS_DELETED          = "data deleted successfully"
 	SUCCESS_RETRIEVED        = "data retrieved successfully"
-	SUCCESS_UPDATED_PASSWORD = "password updated successfully"
+	SUCCESS_PASSWORD_UPDATED = "password updated successfully"
+	SUCCESS_OTP_SENT         = "otp sent successfully"
+	SUCCESS_OTP_VERIFIED     = "otp verification successfully"
 )
 
 // Error
@@ -19,6 +21,7 @@ const (
 	ERROR_EMAIL_EXIST          = "email already exists"
 	ERROR_EMAIL_UNREGISTERED   = "email not registered"
 	ERROR_EMAIL_OTP            = "email or otp not found"
+	ERROR_OTP_VERIFY           = "otp verification failed"
 	ERROR_OTP_NOTFOUND         = "otp not found"
 	ERROR_OTP_EXPIRED          = "otp has expired"
 	ERROR_OTP_GENERATE         = "failed to generate otp"
