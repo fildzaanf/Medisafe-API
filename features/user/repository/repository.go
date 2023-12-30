@@ -180,3 +180,42 @@ func (ur *userRepository) ResetOTP(otp string) (userCore entity.User, err error)
 	response := entity.UserModelToUserCore(userModel)
 	return response, nil
 }
+
+func (ur *userRepository) UpdatePassword(id string, userCore entity.User) error {
+
+	request := entity.UserCoreToUserModel(userCore)
+
+	result := ur.db.Where("id = ?", id).Updates(&request)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New(constant.ERROR_ID_NOTFOUND)
+	}
+
+	return nil
+}
+
+
+func (ur *userRepository) NewPassword(email string, userCore entity.User) (entity.User, error) {
+	userModel := model.User{}
+
+	result := ur.db.Where("email = ?", email).First(&userModel)
+	if result.Error != nil {
+		return entity.User{}, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return entity.User{}, errors.New(constant.ERROR_EMAIL_NOTFOUND)
+	}
+
+	errUpdate := ur.db.Model(&userModel).Updates(entity.UserCoreToUserModel(userCore))
+	if errUpdate != nil {
+		return entity.User{}, errUpdate.Error
+	}
+
+	response := entity.UserModelToUserCore(userModel)
+
+	return response, nil
+}
