@@ -19,6 +19,7 @@ type User struct {
 	Weight         int
 	Role           string
 	OTP            string
+	OTPExpiration  int64
 	IsVerified     bool
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
