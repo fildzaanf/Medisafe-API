@@ -1,4 +1,4 @@
-package otp
+package onetimepassword
 
 import (
 	"log"
