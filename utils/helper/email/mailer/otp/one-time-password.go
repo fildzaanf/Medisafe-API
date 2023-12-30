@@ -44,7 +44,7 @@ func EmailOTP(to []string, template string, data interface{}) (bool, error) {
 	return true, nil
 }
 
-func SendEmailVerificationAccount(emailAddress string, otp string) {
+func SendEmailOTP(emailAddress string, otp string) {
 	go func() {
 		filePath := "utils/helper/email/template/otp.html"
 		emailTemplate, err := os.ReadFile(filePath)
