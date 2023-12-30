@@ -47,7 +47,7 @@ func EmailVerificationAccount(to []string, template string, data interface{}) (b
 func SendEmailVerificationAccount(emailAddress string, token string) {
 	go func() {
 		verificationURL := "https://api.talkspace.my.id/verify-token?token=" + token
-		filePath := "utils/helper/email/template/verification_account.html"
+		filePath := "utils/helper/email/template/verification-account.html"
 		emailTemplate, err := os.ReadFile(filePath)
 		if err != nil {
 			log.Printf("failed to prepare email template: %v", err)
