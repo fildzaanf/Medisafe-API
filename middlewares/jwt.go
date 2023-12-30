@@ -32,8 +32,8 @@ func CreateToken(id string, role string) (string, error) {
 	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 }
 
-func ExtractToken(e echo.Context) (string, string, error) {
-	user := e.Get("user").(*jwt.Token)
+func ExtractToken(c echo.Context) (string, string, error) {
+	user := c.Get("user").(*jwt.Token)
 	if user.Valid {
 		claims := user.Claims.(jwt.MapClaims)
 		Id := claims["id"].(string)
@@ -41,4 +41,25 @@ func ExtractToken(e echo.Context) (string, string, error) {
 		return Id, Role, nil
 	}
 	return "", "", errors.New(constant.ERROR_TOKEN_INVALID)
+}
+
+func CreateVerifyToken(email string) (string, error) {
+	godotenv.Load()
+	claims := jwt.MapClaims{}
+	claims["email"] = email
+	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+}
+
+func ExtractVerifyToken(c echo.Context) (string, error) {
+	user := c.Get("user").(*jwt.Token)
+	if user.Valid {
+		claims := user.Claims.(jwt.MapClaims)
+		email := claims["email"].(string)
+
+		return email, nil
+	}
+	return "", errors.New(constant.ERROR_TOKEN_INVALID)
 }
