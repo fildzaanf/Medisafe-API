@@ -4,9 +4,10 @@ import "talkspace/features/user/entity"
 
 func UserRegisterRequestToUserCore(request UserRegisterRequest) entity.User {
 	return entity.User{
-		Fullname: request.Fullname,
-		Email:    request.Email,
-		Password: request.Password,
+		Fullname:        request.Fullname,
+		Email:           request.Email,
+		Password:        request.Password,
+		ConfirmPassword: request.ConfirmPassword,
 	}
 }
 
@@ -21,12 +22,39 @@ func UserUpdateProfileRequestToUserCore(request UserUpdateProfileRequest) entity
 	return entity.User{
 		Fullname:       request.Fullname,
 		Email:          request.Email,
-		Password:       request.Password,
 		ProfilePicture: request.ProfilePicture,
 		Gender:         request.Gender,
 		Birthdate:      request.Birthdate,
 		BloodType:      request.BloodType,
 		Weight:         request.Weight,
 		Height:         request.Height,
+	}
+}
+
+func UserNewPasswordRequestToUserCore(request UserNewPasswordRequest) entity.User {
+	return entity.User{
+		Password:        request.Password,
+		ConfirmPassword: request.ConfirmPassword,
+	}
+}
+
+func UserUpdatePasswordRequestToUserCore(request UserUpdatePasswordRequest) entity.User {
+	return entity.User{
+		Password:        request.Password,
+		NewPassword:     request.NewPassword,
+		ConfirmPassword: request.ConfirmPassword,
+	}
+}
+
+func UserSendOTPRequestToUserCore(request UserSendOTPRequest) entity.User {
+	return entity.User{
+		Email: request.Email,
+	}
+}
+
+func UserVerifyOTPRequestToUserCore(request UserVerifyOTPRequest) entity.User {
+	return entity.User{
+		Email: request.Email,
+		OTP:   request.OTP,
 	}
 }
