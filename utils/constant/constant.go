@@ -31,4 +31,6 @@ const (
 	ERROR_TOKEN_INVALID      = "invalid token"
 	ERROR_TOKEN_GENERATE     = "generate token failed"
 	ERROR_TEMPLATE_FILE      = "invalid template file"
+	ERROR_TEMPLATE_READER    = "failed to read email template"
 )
+
