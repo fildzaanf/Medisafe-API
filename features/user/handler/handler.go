@@ -62,6 +62,46 @@ func (uh *userHandler) Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, responses.SuccessResponse(constant.SUCCESS_LOGIN, response))
 }
 
+func (uh *userHandler) GetUserByID(c echo.Context) error {
+	userID, _, errExtract := middlewares.ExtractToken(c)
+	
+	if errExtract != nil {
+		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(errExtract.Error()))
+	}
+
+	result, errGetID := uh.userService.GetByID(userID)
+	if errGetID != nil {
+		return c.JSON(http.StatusBadRequest, responses.ErrorResponse(errGetID.Error()))
+	}
+
+	response := response.UserCoreToUserProfileResponse(result)
+
+	return c.JSON(http.StatusOK, responses.SuccessResponse(constant.SUCCESS_PROFILE_RETRIEVED, response))
+}
+
+func (uh *userHandler) UpdateByID(c echo.Context) error {
+	requestUpdateProfile := request.UserUpdateProfileRequest{}
+
+	errBind := c.Bind(&requestUpdateProfile)
+	if errBind != nil {
+		return c.JSON(http.StatusBadRequest, responses.ErrorResponse(errBind.Error()))
+	}
+
+	userID, _, errExtract := middlewares.ExtractToken(c)
+	if errExtract != nil {
+		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(errExtract.Error()))
+	}
+
+	request := request.UserUpdateProfileRequestToUserCore(requestUpdateProfile)
+
+	errUpdate := uh.userService.UpdateByID(userID, request)
+	if errUpdate != nil {
+		return c.JSON(http.StatusBadRequest, responses.ErrorResponse(errUpdate.Error()))
+	}
+
+	return c.JSON(http.StatusOK, responses.SuccessResponse(constant.SUCCESS_PROFILE_UPDATED, nil))
+}
+
 func (uh *userHandler) UpdatePassword(c echo.Context) error {
 	requestUpdatePasword := request.UserUpdatePasswordRequest{}
 
