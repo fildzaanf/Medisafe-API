@@ -2,14 +2,16 @@ package constant
 
 // Success
 const (
-	SUCCESS_LOGIN            = "logged in successfully"
-	SUCCESS_REGISTER         = "register successfully"
-	SUCCESS_CREATED          = "data created successfully"
-	SUCCESS_DELETED          = "data deleted successfully"
-	SUCCESS_RETRIEVED        = "data retrieved successfully"
-	SUCCESS_PASSWORD_UPDATED = "password updated successfully"
-	SUCCESS_OTP_SENT         = "otp sent successfully"
-	SUCCESS_OTP_VERIFIED     = "otp verification successfully"
+	SUCCESS_LOGIN             = "logged in successfully"
+	SUCCESS_REGISTER          = "register successfully"
+	SUCCESS_CREATED           = "data created successfully"
+	SUCCESS_DELETED           = "data deleted successfully"
+	SUCCESS_RETRIEVED         = "data retrieved successfully"
+	SUCCESS_PROFILE_UPDATED   = "profile data updated successfully"
+	SUCCESS_PROFILE_RETRIEVED = "profile data retrieved successfully"
+	SUCCESS_PASSWORD_UPDATED  = "password updated successfully"
+	SUCCESS_OTP_SENT          = "otp sent successfully"
+	SUCCESS_OTP_VERIFIED      = "otp verification successfully"
 )
 
 // Error
