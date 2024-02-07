@@ -1,14 +1,21 @@
 package repository
 
 import (
+	"encoding/json"
 	"errors"
+	"log"
 	"talkspace/features/user/entity"
 	"talkspace/features/user/model"
 	"talkspace/utils/constant"
 	"talkspace/utils/helper/bcrypt"
+	"time"
 
 	"github.com/go-redis/redis"
 	"gorm.io/gorm"
+)
+
+var (
+	cacheExpiration = 10 * time.Minute
 )
 
 type userRepository struct {
@@ -56,7 +63,19 @@ func (ur *userRepository) Login(email, password string) (entity.User, error) {
 }
 
 func (ur *userRepository) GetByID(id string) (entity.User, error) {
+
 	userModel := model.User{}
+
+	cacheKey := "user:" + id
+	cachedUser, err := ur.rdb.Get(cacheKey).Result()
+	if err == nil {
+		if err := json.Unmarshal([]byte(cachedUser), &userModel); err != nil {
+			log.Printf("error unmarshalling cached user data: %v", err)
+		} else {
+			response := entity.UserModelToUserCore(userModel)
+			return response, nil
+		}
+	}
 
 	result := ur.db.Where("id = ?", id).First(&userModel)
 	if result.Error != nil {
@@ -65,6 +84,16 @@ func (ur *userRepository) GetByID(id string) (entity.User, error) {
 
 	if result.RowsAffected == 0 {
 		return entity.User{}, errors.New(constant.ERROR_ID_NOTFOUND)
+	}
+
+	userModelJSON, err := json.Marshal(userModel)
+	if err != nil {
+		log.Printf("error marshalling user data to JSON: %v", err)
+	} else {
+		err := ur.rdb.Set(cacheKey, userModelJSON, cacheExpiration).Err()
+		if err != nil {
+			log.Printf("error caching user data: %v", err)
+		}
 	}
 
 	response := entity.UserModelToUserCore(userModel)
@@ -89,6 +118,17 @@ func (ur *userRepository) UpdateByID(id string, userCore entity.User) error {
 func (ur *userRepository) FindByEmail(email string) (entity.User, error) {
 	userModel := model.User{}
 
+	cacheKey := "user:email:" + email
+	cachedUser, err := ur.rdb.Get(cacheKey).Result()
+	if err == nil {
+		if err := json.Unmarshal([]byte(cachedUser), &userModel); err != nil {
+			log.Printf("Error unmarshalling cached user data: %v", err)
+		} else {
+			response := entity.UserModelToUserCore(userModel)
+			return response, nil
+		}
+	}
+
 	result := ur.db.Where("email = ?", email).First(&userModel)
 
 	if result.RowsAffected == 0 {
@@ -99,12 +139,33 @@ func (ur *userRepository) FindByEmail(email string) (entity.User, error) {
 		return entity.User{}, result.Error
 	}
 
+	userModelJSON, err := json.Marshal(userModel)
+	if err != nil {
+		log.Printf("error marshalling user data to JSON: %v", err)
+	} else {
+		err := ur.rdb.Set(cacheKey, userModelJSON, cacheExpiration).Err()
+		if err != nil {
+			log.Printf("error caching user data: %v", err)
+		}
+	}
+
 	response := entity.UserModelToUserCore(userModel)
 	return response, nil
 }
 
 func (ur *userRepository) GetByVerificationToken(token string) (entity.User, error) {
 	userModel := model.User{}
+
+	cacheKey := "user:token:" + token
+	cachedUser, err := ur.rdb.Get(cacheKey).Result()
+	if err == nil {
+		if err := json.Unmarshal([]byte(cachedUser), &userModel); err != nil {
+			log.Printf("error unmarshalling cached user data: %v", err)
+		} else {
+			response := entity.UserModelToUserCore(userModel)
+			return response, nil
+		}
+	}
 
 	result := ur.db.Where("verification_token = ?", token).First(&userModel)
 	if result.Error != nil {
@@ -113,6 +174,16 @@ func (ur *userRepository) GetByVerificationToken(token string) (entity.User, err
 
 	if result.RowsAffected == 0 {
 		return entity.User{}, errors.New(constant.ERROR_TOKEN_NOTFOUND)
+	}
+
+	userModelJSON, err := json.Marshal(userModel)
+	if err != nil {
+		log.Printf("error marshalling user data to JSON: %v", err)
+	} else {
+		err := ur.rdb.Set(cacheKey, userModelJSON, cacheExpiration).Err()
+		if err != nil {
+			log.Printf("error caching user data: %v", err)
+		}
 	}
 
 	userToken := entity.UserModelToUserCore(userModel)

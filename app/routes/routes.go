@@ -8,10 +8,16 @@ import (
 
 func SetupRoutes(e *echo.Echo, db *gorm.DB, rdb *redis.Client) {
 
-	auth := e.Group("/")
 	user := e.Group("/users")
+	doctor := e.Group("/doctors")
+	transaction := e.Group("/transactions")
+	consultation := e.Group("/consultations")
+	chatbot := e.Group("/chatbots")
 
-	AuthRoutes(auth, db, rdb)
 	UserRoutes(user, db, rdb)
+	DoctorRoutes(doctor, db, rdb)
+	TransactionRoutes(transaction, db, rdb)
+	ConsultationRoutes(consultation, db, rdb)
+	ChatbotRoutes(chatbot, db, rdb)
 
 }

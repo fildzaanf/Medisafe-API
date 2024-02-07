@@ -63,8 +63,12 @@ func (uh *userHandler) Login(c echo.Context) error {
 }
 
 func (uh *userHandler) GetUserByID(c echo.Context) error {
-	userID, _, errExtract := middlewares.ExtractToken(c)
-	
+	userID, role, errExtract := middlewares.ExtractToken(c)
+
+	if role != constant.USER {
+		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(constant.ERROR_ROLE_ACCESS))
+	}
+
 	if errExtract != nil {
 		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(errExtract.Error()))
 	}
@@ -87,7 +91,12 @@ func (uh *userHandler) UpdateByID(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.ErrorResponse(errBind.Error()))
 	}
 
-	userID, _, errExtract := middlewares.ExtractToken(c)
+	userID, role, errExtract := middlewares.ExtractToken(c)
+	
+	if role != constant.USER {
+		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(constant.ERROR_ROLE_ACCESS))
+	}
+
 	if errExtract != nil {
 		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(errExtract.Error()))
 	}
@@ -110,7 +119,12 @@ func (uh *userHandler) UpdatePassword(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, responses.ErrorResponse(errBind.Error()))
 	}
 
-	userID, _, errExtractToken := middlewares.ExtractToken(c)
+	userID, role, errExtractToken := middlewares.ExtractToken(c)
+
+	if role != constant.USER {
+		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(constant.ERROR_ROLE_ACCESS))
+	}
+
 	if errExtractToken != nil {
 		return c.JSON(http.StatusUnauthorized, responses.ErrorResponse(errExtractToken.Error()))
 	}
