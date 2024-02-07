@@ -17,9 +17,22 @@ func UserRoutes(e *echo.Group, db *gorm.DB, rdb *redis.Client) {
 	userService := service.NewUserService(userRepository)
 	userHandler := handler.NewUserHandler(userService)
 
-	user := e.Group("/profile", middlewares.JWTMiddleware())
-	user.GET("", userHandler.GetUserByID)
-	user.PUT("", userHandler.UpdateByID)
-	user.PATCH("/change-password", userHandler.UpdatePassword)
+	account := e.Group("/account")
+	account.POST("register", userHandler.Register)
+	account.GET("verify-account", userHandler.VerifyAccount)
+	account.POST("login", userHandler.Login)
+
+	password := e.Group("/password")
+	password.POST("forgot-password", userHandler.ForgotPassword)
+	password.POST("verify-otp", userHandler.VerifyOTP)
+	password.PATCH("new-password", userHandler.NewPassword, middlewares.JWTMiddleware())
+
+	profile := e.Group("/profile", middlewares.JWTMiddleware())
+	profile.GET("", userHandler.GetUserByID)
+	profile.PUT("", userHandler.UpdateByID)
+	profile.PATCH("/change-password", userHandler.UpdatePassword)
 
 }
+
+
+
