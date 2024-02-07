@@ -2,26 +2,35 @@ package middlewares
 
 import (
 	"errors"
-	"os"
-	"talkspace/utils/constant"
 	"time"
+
+	"talkspace/app/configs"
+	"talkspace/utils/constant"
 
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/joho/godotenv"
 	echojwt "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"
+	"github.com/sirupsen/logrus"
 )
 
+var config *configs.Configuration
+
+func init() {
+	err := godotenv.Load()
+	if err != nil {
+		logrus.Fatalf("failed to load configuration: %v", err)
+	}
+}
+
 func JWTMiddleware() echo.MiddlewareFunc {
-	godotenv.Load()
 	return echojwt.WithConfig(echojwt.Config{
-		SigningKey:    []byte(os.Getenv("JWT_SECRET")),
+		SigningKey:    []byte(config.JWT.JWT_SECRET),
 		SigningMethod: "HS256",
 	})
 }
 
 func CreateToken(id string, role string) (string, error) {
-	godotenv.Load()
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["id"] = id
@@ -29,7 +38,7 @@ func CreateToken(id string, role string) (string, error) {
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	return token.SignedString([]byte(config.JWT.JWT_SECRET))
 }
 
 func ExtractToken(c echo.Context) (string, string, error) {
@@ -50,7 +59,7 @@ func CreateVerifyToken(email string) (string, error) {
 	claims["exp"] = time.Now().Add(time.Minute * 15).Unix()
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	return token.SignedString([]byte(config.JWT.JWT_SECRET))
 }
 
 func ExtractVerifyToken(c echo.Context) (string, error) {
