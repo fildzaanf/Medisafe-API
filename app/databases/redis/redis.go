@@ -2,6 +2,7 @@ package redis
 
 import (
 	"fmt"
+	"strconv"
 	"talkspace/app/configs"
 
 	"github.com/go-redis/redis"
@@ -11,23 +12,30 @@ import (
 func ConnectRedis() *redis.Client {
 	config, err := configs.LoadConfig()
 	if err != nil {
-		logrus.Fatalf("failed to load redis configuration: %v", err)
+		logrus.Fatalf("failed to load Redis configuration: %v", err)
 		return nil
+	}
+
+	redisDB, err := strconv.Atoi(config.REDIS.REDIS_DB)
+	if err != nil {
+		redisDB = 1
 	}
 
 	client := redis.NewClient(&redis.Options{
 		Addr: fmt.Sprintf("%s:%s",
-		 	  		config.REDIS.REDIS_HOST,
-		      		config.REDIS.REDIS_PORT),
-		DB:   1,
+			config.REDIS.REDIS_HOST,
+			config.REDIS.REDIS_PORT,
+		),
+		Password: config.REDIS.REDIS_PASS,
+		DB:       redisDB,
 	})
 
 	_, err = client.Ping().Result()
 	if err != nil {
-		logrus.Errorf("failed to connect to redis: %v", err)
+		logrus.Errorf("failed to connect to Redis: %v", err)
 		return nil
 	}
 
-	logrus.Info("connected to redis")
+	logrus.Info("connected to Redis")
 	return client
 }
