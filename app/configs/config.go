@@ -7,7 +7,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
-type AppConfig struct {
+type Configuration struct {
+	POSTGRESQL   PostgreSQLConfig
 	MYSQL        MySQLConfig
 	REDIS        RedisConfig
 	CLOUDSTORAGE CloudStorageConfig
@@ -15,19 +16,31 @@ type AppConfig struct {
 	MIDTRANS     MidtransConfig
 	SMTP         SMTPConfig
 	OPENAI       OpenAIConfig
+	JWT          JWTConfig
+	SERVER       ServerConfig
 }
 
 type MySQLConfig struct {
-	DB_USER string
-	DB_PASS string
-	DB_HOST string
-	DB_PORT string
-	DB_NAME string
+	MYSQL_USER string
+	MYSQL_PASS string
+	MYSQL_HOST string
+	MYSQL_PORT string
+	MYSQL_NAME string
+}
+
+type PostgreSQLConfig struct {
+	POSTGRESQL_USER string
+	POSTGRESQL_PASS string
+	POSTGRESQL_HOST string
+	POSTGRESQL_PORT string
+	POSTGRESQL_NAME string
 }
 
 type RedisConfig struct {
 	REDIS_HOST string
 	REDIS_PORT string
+	REDIS_DB   string
+	REDIS_PASS string
 }
 
 type CloudStorageConfig struct {
@@ -37,8 +50,7 @@ type CloudStorageConfig struct {
 }
 
 type FirebaseConfig struct {
-	FIREBASE_API_KEY          string
-	FIREBASE_CREDENTIALS_FILE string
+	FIREBASE_API_KEY string
 }
 
 type MidtransConfig struct {
@@ -57,7 +69,16 @@ type SMTPConfig struct {
 	SMTP_HOST string
 }
 
-func LoadConfig() (*AppConfig, error) {
+type ServerConfig struct {
+	SERVER_HOST string
+	SERVER_PORT string
+}
+
+type JWTConfig struct {
+	JWT_SECRET string
+}
+
+func LoadConfig() (*Configuration, error) {
 
 	_, err := os.Stat(".env")
 	if err == nil {
@@ -69,17 +90,26 @@ func LoadConfig() (*AppConfig, error) {
 		fmt.Println("warning: .env file not found. make sure environment variables are set")
 	}
 
-	return &AppConfig{
+	return &Configuration{
 		MYSQL: MySQLConfig{
-			DB_USER: os.Getenv("DB_USER"),
-			DB_PASS: os.Getenv("DB_PASS"),
-			DB_HOST: os.Getenv("DB_HOST"),
-			DB_PORT: os.Getenv("DB_PORT"),
-			DB_NAME: os.Getenv("DB_NAME"),
+			MYSQL_USER: os.Getenv("MYSQL_USER"),
+			MYSQL_PASS: os.Getenv("MYSQL_PASS"),
+			MYSQL_HOST: os.Getenv("MYSQL_HOST"),
+			MYSQL_PORT: os.Getenv("MYSQL_PORT"),
+			MYSQL_NAME: os.Getenv("MYSQL_NAME"),
+		},
+		POSTGRESQL: PostgreSQLConfig{
+			POSTGRESQL_USER: os.Getenv("POSTGRESQL_USER"),
+			POSTGRESQL_PASS: os.Getenv("POSTGRESQL_PASS"),
+			POSTGRESQL_HOST: os.Getenv("POSTGRESQL_HOST"),
+			POSTGRESQL_PORT: os.Getenv("POSTGRESQL_PORT"),
+			POSTGRESQL_NAME: os.Getenv("POSTGRESQL_DB"),
 		},
 		REDIS: RedisConfig{
 			REDIS_HOST: os.Getenv("REDIS_HOST"),
 			REDIS_PORT: os.Getenv("REDIS_PORT"),
+			REDIS_DB:   os.Getenv("REDIS_DB"),
+			REDIS_PASS: os.Getenv("REDIS_PASS"),
 		},
 		CLOUDSTORAGE: CloudStorageConfig{
 			GOOGLE_APPLICATION_CREDENTIALS: os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"),
@@ -87,8 +117,7 @@ func LoadConfig() (*AppConfig, error) {
 			CLOUD_BUCKET_NAME:              os.Getenv("CLOUD_BUCKET_NAME"),
 		},
 		FIREBASE: FirebaseConfig{
-			FIREBASE_API_KEY:          os.Getenv("FIREBASE_API_KEY"),
-			FIREBASE_CREDENTIALS_FILE: os.Getenv("FIREBASE_CREDENTIALS_FILE"),
+			FIREBASE_API_KEY: os.Getenv("FIREBASE_API_KEY"),
 		},
 		MIDTRANS: MidtransConfig{
 			MIDTRANS_SERVER_KEY: os.Getenv("MIDTRANS_SERVER_KEY"),
@@ -102,6 +131,13 @@ func LoadConfig() (*AppConfig, error) {
 		},
 		OPENAI: OpenAIConfig{
 			OPENAI_KEY: os.Getenv("OPENAI_KEY"),
+		},
+		SERVER: ServerConfig{
+			SERVER_HOST: os.Getenv("SERVER_HOST"),
+			SERVER_PORT: os.Getenv("SERVER_PORT"),
+		},
+		JWT: JWTConfig{
+			JWT_SECRET: os.Getenv("JWT_SECRET"),
 		},
 	}, nil
 }
