@@ -5,17 +5,21 @@ import (
 	"talkspace/features/user/entity"
 	"talkspace/features/user/model"
 	"talkspace/utils/constant"
+	"talkspace/utils/helper/bcrypt"
 
+	"github.com/go-redis/redis"
 	"gorm.io/gorm"
 )
 
 type userRepository struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *redis.Client
 }
 
-func NewUserRepository(db *gorm.DB) entity.UserRepositoryInterface {
+func NewUserRepository(db *gorm.DB, rdb *redis.Client) entity.UserRepositoryInterface {
 	return &userRepository{
-		db: db,
+		db:  db,
+		rdb: rdb,
 	}
 }
 
@@ -28,6 +32,26 @@ func (ur *userRepository) Register(userCore entity.User) (entity.User, error) {
 	}
 
 	response := entity.UserModelToUserCore(request)
+	return response, nil
+}
+
+func (ur *userRepository) Login(email, password string) (entity.User, error) {
+	userModel := model.User{}
+
+	result := ur.db.Where("email = ?", email).First(&userModel)
+	if result.Error != nil {
+		return entity.User{}, result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return entity.User{}, errors.New(constant.ERROR_EMAIL_NOTFOUND)
+	}
+
+	if errComparePass := bcrypt.ComparePassword(userModel.Password, password); errComparePass != nil {
+		return entity.User{}, errors.New(constant.ERROR_PASSWORD_INVALID)
+	}
+
+	response := entity.UserModelToUserCore(userModel)
 	return response, nil
 }
 
@@ -66,13 +90,13 @@ func (ur *userRepository) FindByEmail(email string) (entity.User, error) {
 	userModel := model.User{}
 
 	result := ur.db.Where("email = ?", email).First(&userModel)
-	
+
 	if result.RowsAffected == 0 {
 		return entity.User{}, errors.New(constant.ERROR_EMAIL_NOTFOUND)
 	}
 
 	if result.Error != nil {
-		return entity.User{},result.Error
+		return entity.User{}, result.Error
 	}
 
 	response := entity.UserModelToUserCore(userModel)
@@ -196,7 +220,6 @@ func (ur *userRepository) UpdatePassword(id string, userCore entity.User) error 
 
 	return nil
 }
-
 
 func (ur *userRepository) NewPassword(email string, userCore entity.User) (entity.User, error) {
 	userModel := model.User{}
