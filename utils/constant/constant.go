@@ -1,5 +1,12 @@
 package constant
 
+// Roles
+const (
+	USER = "user"
+	DOCTOR = "doctor"
+)
+
+
 // Success
 const (
 	SUCCESS_LOGIN             = "logged in successfully"
@@ -52,4 +59,5 @@ const (
 	ERROR_ACCOUNT_UNVERIFIED   = "account is not verified"
 	ERROR_TEMPLATE_FILE        = "invalid template file"
 	ERROR_TEMPLATE_READER      = "failed to read email template"
+	ERROR_ROLE_ACCESS          = "not authorized to access this resource"
 )

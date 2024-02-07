@@ -59,7 +59,7 @@ func (us *userService) Register(userCore entity.User) (entity.User, error) {
 	if errGenerateVerifyToken != nil {
 		errors.New(constant.ERROR_TOKEN_VERIFICATION)
 	}
-	userCore.VerificationToken = token
+	userCore.VerifyAccount = token
 
 	userData, errRegister := us.userRepository.Register(userCore)
 	if errRegister != nil {
