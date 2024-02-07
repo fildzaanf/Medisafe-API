@@ -4,6 +4,7 @@ import "github.com/labstack/echo/v4"
 
 type UserRepositoryInterface interface {
 	Register(userCore User) (User, error)
+	Login(email, password string) (User, error)
 	GetByID(id string) (User, error)
 	UpdateByID(id string, userCore User) error
 	UpdatePassword(id string, userCore User) error
@@ -21,7 +22,7 @@ type UserServiceInterface interface {
 	Login(email, password string) (User, string, error)
 	GetByID(id string) (User, error)
 	UpdateByID(id string, userCore User) error
-	UpdatePassword(id string, userCore User) error 
+	UpdatePassword(id string, userCore User) error
 	NewPassword(email string, userCore User) error
 	VerifyUser(token string) (bool, error)
 	UpdateIsVerified(id string, isVerified bool) error
@@ -35,7 +36,7 @@ type UserHandlerInterface interface {
 	GetUserByID(c echo.Context) error
 	UpdateByID(c echo.Context) error
 	UpdatePassword(c echo.Context) error
-	ForgotPassword(c echo.Context) error 
+	ForgotPassword(c echo.Context) error
 	NewPassword(c echo.Context) error
 	VerifyAccount(c echo.Context) error
 	VerifyOTP(c echo.Context) error
