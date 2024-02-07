@@ -13,25 +13,25 @@ import (
 func ConnectMySQL() *gorm.DB {
 	config, err := configs.LoadConfig()
 	if err != nil {
-		log.Fatalf("failed to load mysql configuration: %v", err)
+		log.Fatalf("failed to load MySQL configuration: %v", err)
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=UTC",
-			config.MYSQL.DB_USER,
-			config.MYSQL.DB_PASS,
-			config.MYSQL.DB_HOST,
-			config.MYSQL.DB_PORT,
-			config.MYSQL.DB_NAME,
+			config.MYSQL.MYSQL_USER,
+			config.MYSQL.MYSQL_PASS,
+			config.MYSQL.MYSQL_HOST,
+			config.MYSQL.MYSQL_PORT,
+			config.MYSQL.MYSQL_NAME,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatalf("failed to connect to mysql: %v", err)
+	if err != nil { 
+		log.Fatalf("failed to connect to MySQL: %v", err)
 	}
 
 	migration.Migrate(db)
 
-	log.Println("connected to mysql")
+	log.Println("connected to MySQL")
 
 	return db
 }

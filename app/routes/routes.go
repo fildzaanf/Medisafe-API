@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func New(e *echo.Echo, db *gorm.DB) {
+func SetupRoutes(e *echo.Echo, db *gorm.DB) {
 	
 	auth := e.Group("/")
 	user := e.Group("/users")
