@@ -122,7 +122,7 @@ func (ur *userRepository) FindByEmail(email string) (entity.User, error) {
 	cachedUser, err := ur.rdb.Get(cacheKey).Result()
 	if err == nil {
 		if err := json.Unmarshal([]byte(cachedUser), &userModel); err != nil {
-			log.Printf("Error unmarshalling cached user data: %v", err)
+			log.Printf("error unmarshalling cached user data: %v", err)
 		} else {
 			response := entity.UserModelToUserCore(userModel)
 			return response, nil
