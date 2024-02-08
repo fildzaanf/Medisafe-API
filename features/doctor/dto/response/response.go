@@ -23,7 +23,7 @@ type DoctorLoginResponse struct {
 	Token    string `json:"token"`
 }
 
-type DoctorUpdateResponse struct {
+type DoctorProfileResponse struct {
 	ID               string `json:"id"`
 	Fullname         string `json:"fullname"`
 	Email            string `json:"email"`

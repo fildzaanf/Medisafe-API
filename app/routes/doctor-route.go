@@ -1,6 +1,9 @@
 package routes
 
 import (
+	"talkspace/features/doctor/handler"
+	"talkspace/features/doctor/repository"
+	"talkspace/features/doctor/service"
 	"talkspace/middlewares"
 
 	"github.com/go-redis/redis"

@@ -29,8 +29,8 @@ func DoctorCoreToDoctorLoginResponse(response entity.Doctor, token string) Docto
 	}
 }
 
-func DoctorCoreToDoctorUpdateResponse(response entity.Doctor) DoctorUpdateResponse {
-	return DoctorUpdateResponse{
+func DoctorCoreToDoctorProfileResponse(response entity.Doctor) DoctorProfileResponse {
+	return DoctorProfileResponse{
 		ID:               response.ID,
 		Fullname:         response.Fullname,
 		Email:            response.Email,
