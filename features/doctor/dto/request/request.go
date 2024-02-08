@@ -20,7 +20,7 @@ type DoctorLoginRequest struct {
 	Password string `json:"password" form:"password"`
 }
 
-type DoctorUpdateRequest struct {
+type DoctorProfileRequest struct {
 	Fullname         string `json:"fullname" form:"fullname"`
 	Email            string `json:"email" form:"email"`
 	ProfilePicture   string `json:"profile_picture" form:"profile_picture"`

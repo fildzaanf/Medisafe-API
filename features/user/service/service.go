@@ -25,7 +25,11 @@ func NewUserService(ur entity.UserRepositoryInterface) entity.UserServiceInterfa
 
 func (us *userService) Register(userCore entity.User) (entity.User, error) {
 
-	errEmpty := validator.IsDataEmpty(userCore.Fullname, userCore.Email, userCore.Password, userCore.ConfirmPassword)
+	errEmpty := validator.IsDataEmpty(
+		userCore.Fullname, 
+		userCore.Email, 
+		userCore.Password, 
+		userCore.ConfirmPassword)
 	if errEmpty != nil {
 		return entity.User{}, errEmpty
 	}

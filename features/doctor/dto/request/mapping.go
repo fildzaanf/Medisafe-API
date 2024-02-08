@@ -26,7 +26,7 @@ func DoctorLoginRequestToDoctorCore(request DoctorLoginRequest) entity.Doctor {
 	}
 }
 
-func DoctorUpdateRequestToDoctorCore(request DoctorUpdateRequest) entity.Doctor {
+func DoctorProfileRequestToDoctorCore(request DoctorProfileRequest) entity.Doctor {
 	return entity.Doctor{
 		Fullname:         request.Fullname,
 		Email:            request.Email,
