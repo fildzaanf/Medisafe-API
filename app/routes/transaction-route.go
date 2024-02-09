@@ -16,4 +16,10 @@ func TransactionRoutes(e *echo.Group, db *gorm.DB, rdb *redis.Client) {
 	transactionService := service.NewTransactionService(transactionRepository)
 	transactionHandler := handler.NewTransactionHandler(transactionService)
 
+	transaction := e.Group("/consultation", middlewares.JWTMiddleware())
+	transaction.POST("", transactionHandler.CreateTransaction)
+	transaction.GET("", transactionHandler.GetAllTransactions)
+	transaction.GET("/:transaction_id", transactionHandler.GetTransactionByID)
+
 }
+
