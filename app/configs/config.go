@@ -44,9 +44,9 @@ type RedisConfig struct {
 }
 
 type CloudStorageConfig struct {
-	GOOGLE_APPLICATION_CREDENTIALS string
-	CLOUD_PROJECT_ID               string
-	CLOUD_BUCKET_NAME              string
+	GOOGLE_CLOUD_STORAGE_SERVICE_ACCOUNT string
+	GOOGLE_CLOUD_PROJECT_ID              string
+	GOOGLE_CLOUD_STORAGE_BUCKET          string
 }
 
 type FirebaseConfig struct {
@@ -59,7 +59,7 @@ type MidtransConfig struct {
 }
 
 type OpenAIConfig struct {
-	OPENAI_KEY string
+	OPENAI_API_KEY string
 }
 
 type SMTPConfig struct {
@@ -112,9 +112,9 @@ func LoadConfig() (*Configuration, error) {
 			REDIS_PASS: os.Getenv("REDIS_PASS"),
 		},
 		CLOUDSTORAGE: CloudStorageConfig{
-			GOOGLE_APPLICATION_CREDENTIALS: os.Getenv("GOOGLE_APPLICATION_CREDENTIALS"),
-			CLOUD_PROJECT_ID:               os.Getenv("CLOUD_PROJECT_ID"),
-			CLOUD_BUCKET_NAME:              os.Getenv("CLOUD_BUCKET_NAME"),
+			GOOGLE_CLOUD_STORAGE_SERVICE_ACCOUNT: os.Getenv("GOOGLE_CLOUD_STORAGE_SERVICE_ACCOUNT"),
+			GOOGLE_CLOUD_PROJECT_ID:              os.Getenv("GOOGLE_CLOUD_PROJECT_ID"),
+			GOOGLE_CLOUD_STORAGE_BUCKET:          os.Getenv("GOOGLE_CLOUD_STORAGE_BUCKET"),
 		},
 		FIREBASE: FirebaseConfig{
 			FIREBASE_API_KEY: os.Getenv("FIREBASE_API_KEY"),
@@ -130,7 +130,7 @@ func LoadConfig() (*Configuration, error) {
 			SMTP_HOST: os.Getenv("SMTP_HOST"),
 		},
 		OPENAI: OpenAIConfig{
-			OPENAI_KEY: os.Getenv("OPENAI_KEY"),
+			OPENAI_API_KEY: os.Getenv("OPENAI_API_KEY"),
 		},
 		SERVER: ServerConfig{
 			SERVER_HOST: os.Getenv("SERVER_HOST"),
